@@ -46,6 +46,8 @@ class Challenges(QWidget):
         self.hbox3.addWidget(self.finished_tasks)
         self.vbox.addLayout(self.hbox3)
 
+        self.show_active_tasks()
+
         self.create_buttons()  # buttons on window
 
         self.setLayout(self.vbox)
@@ -66,11 +68,18 @@ class Challenges(QWidget):
 
         self.vbox.addLayout(self.hbox4)
 
+    def show_active_tasks(self):
+        self.query.exec("""SELECT active FROM active_tasks""")
+        while self.query.next():
+            self.active_tasks.addItem(self.query.value(0))
+
     def add_task(self):
         new_active_task = self.add_line.text()
         self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
         self.query.addBindValue(new_active_task)
         self.query.exec()
+
+        self.active_tasks.addItem(new_active_task)
 
     def create_db(self):
         self.db = QSqlDatabase.addDatabase("QSQLITE")
