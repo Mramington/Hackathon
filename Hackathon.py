@@ -10,7 +10,7 @@ class Challenges(QWidget):
 
         # window
         self.setWindowTitle('Tasks List')
-        self.setMinimumSize(200, 200)  # minimal size of window, чтобы не баловались
+        self.setMinimumSize(220, 200)  # minimal size of window, чтобы не баловались
         self.resize(500, 400)
 
         # creation of datebase
@@ -57,8 +57,10 @@ class Challenges(QWidget):
         self.finished_tasks.setSelectionMode(3)
 
     def create_add_button(self):
-        self.add_line.editingFinished.connect(self.add_task)
+        placeholder_text = 'Write here to add a Task'
+        self.add_line.setPlaceholderText(placeholder_text)  # Adding translucent (полупрозрачный) text to add_line
 
+        self.add_line.editingFinished.connect(self.add_task)
         self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
