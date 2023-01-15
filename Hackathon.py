@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget
-from PyQt5.QtCore import Qt
+from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 
 
 class Challenges(QWidget):
@@ -8,52 +8,75 @@ class Challenges(QWidget):
         super().__init__()
 
         # window
-        self.setWindowTitle('TasksList')
+        self.setWindowTitle('Tasks List')
         self.setMinimumSize(200, 200)  # minimal size of window, чтобы не баловались
-        self.resize(300, 300)
+        self.resize(500, 400)
+
+        # creation of datebase
+        self.create_db()
 
         # area
         self.vbox = QVBoxLayout()
         self.hbox1 = QHBoxLayout()
         self.hbox2 = QHBoxLayout()
         self.hbox3 = QHBoxLayout()
+        self.hbox4 = QHBoxLayout()
         self.label_active_tasks = QLabel('Active Tasks', self)  # area for active tasks
         self.label_finished_tasks = QLabel('Finished Tasks', self)  # area for completed tasks
         self.active_tasks = QListWidget()
         self.finished_tasks = QListWidget()
+        self.add_line = QLineEdit()
 
         self.initUI()
 
     def initUI(self):
         self.set_structure()
+        self.create_db()
         self.show()
 
     def set_structure(self):
-        self.hbox1.addWidget(self.label_active_tasks)
-        self.hbox1.addWidget(self.label_finished_tasks)
-        self.vbox.addLayout(self.hbox1)
+        self.create_add_button()
 
-        self.hbox2.addWidget(self.active_tasks)
-        self.hbox2.addWidget(self.finished_tasks)
+        self.hbox2.addWidget(self.label_active_tasks)
+        self.hbox2.addWidget(self.label_finished_tasks)
         self.vbox.addLayout(self.hbox2)
+
+        self.hbox3.addWidget(self.active_tasks)
+        self.hbox3.addWidget(self.finished_tasks)
+        self.vbox.addLayout(self.hbox3)
 
         self.create_buttons()  # buttons on window
 
         self.setLayout(self.vbox)
 
-    def create_buttons(self):
+    def create_add_button(self):
         button_add_task = QPushButton('Add Task', self)  # button "Add Task"
+        self.hbox1.addWidget(button_add_task)
+        self.hbox1.addWidget(self.add_line)
+        self.vbox.addLayout(self.hbox1)
+
+    def create_buttons(self):
         button_finish_task = QPushButton('Finish Task', self)  # button "Finish Task"
         button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
 
-        self.hbox3.addWidget(button_add_task)
-        # self.vbox.addLayout(self.hbox1)
+        self.hbox4.addWidget(button_finish_task)
+        self.hbox4.addWidget(button_del_task)
 
-        self.hbox3.addWidget(button_finish_task)
-        # self.vbox.addLayout(self.hbox2)
+        self.vbox.addLayout(self.hbox4)
 
-        self.hbox3.addWidget(button_del_task)
-        self.vbox.addLayout(self.hbox3)
+    def create_db(self):
+        self.db = QSqlDatabase.addDatabase("QSQLITE")
+        self.db.setDatabaseName("Hackathon_Molecule_group.sqlite")
+
+        if not self.db.open():
+            print("Database can't be opened", self.db.lastError())
+
+        self.query = QSqlQuery()
+        self.query.exec("""CREATE TABLE IF NOT EXISTS tasks_2g(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        active VARCHAR(255) NOT NULL
+        finished VARCHAR(255) NOT NULL
+        )""")
 
 
 if __name__ == '__main__':
