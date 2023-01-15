@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget
+from PyQt5.QtCore import Qt
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 
 
@@ -51,6 +52,7 @@ class Challenges(QWidget):
 
     def create_add_button(self):
         button_add_task = QPushButton('Add Task', self)  # button "Add Task"
+        button_add_task.clicked.connect(self.add_task)
         self.hbox1.addWidget(button_add_task)
         self.hbox1.addWidget(self.add_line)
         self.vbox.addLayout(self.hbox1)
@@ -64,6 +66,12 @@ class Challenges(QWidget):
 
         self.vbox.addLayout(self.hbox4)
 
+    def add_task(self):
+        new_active_task = self.add_line.text()
+        self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
+        self.query.addBindValue(new_active_task)
+        self.query.exec()
+
     def create_db(self):
         self.db = QSqlDatabase.addDatabase("QSQLITE")
         self.db.setDatabaseName("Hackathon_Molecule_group.sqlite")
@@ -72,9 +80,13 @@ class Challenges(QWidget):
             print("Database can't be opened", self.db.lastError())
 
         self.query = QSqlQuery()
-        self.query.exec("""CREATE TABLE IF NOT EXISTS tasks_2g(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        self.query.exec("""CREATE TABLE IF NOT EXISTS active_tasks(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         active VARCHAR(255) NOT NULL
+        )""")
+
+        self.query.exec("""CREATE TABLE IF NOT EXISTS finished_tasks(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         finished VARCHAR(255) NOT NULL
         )""")
 
