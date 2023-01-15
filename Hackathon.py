@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit
+from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget
 from PyQt5.QtCore import Qt
 
 
@@ -19,8 +19,8 @@ class Challenges(QWidget):
         self.hbox3 = QHBoxLayout()
         self.label_active_tasks = QLabel('Active Tasks', self)  # area for active tasks
         self.label_finished_tasks = QLabel('Finished Tasks', self)  # area for completed tasks
-        self.active_tasks = QLineEdit()
-        self.finished_tasks = QLineEdit()
+        self.active_tasks = QListWidget()
+        self.finished_tasks = QListWidget()
 
         self.initUI()
 
