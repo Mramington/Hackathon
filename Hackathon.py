@@ -37,7 +37,12 @@ class Challenges(QWidget):
 
     def set_structure(self):
         self.create_add_button()
+        self.set_qlistwidgets_and_qlabels()
+        self.show_active_tasks()
 
+        self.create_buttons()  # buttons on window
+
+    def set_qlistwidgets_and_qlabels(self):
         self.hbox2.addWidget(self.label_active_tasks)
         self.hbox2.addWidget(self.label_finished_tasks)
         self.vbox.addLayout(self.hbox2)
@@ -46,18 +51,15 @@ class Challenges(QWidget):
         self.hbox3.addWidget(self.finished_tasks)
         self.vbox.addLayout(self.hbox3)
 
-        self.show_active_tasks()
-
-        self.create_buttons()  # buttons on window
-
         self.setLayout(self.vbox)
 
+        self.active_tasks.setSelectionMode(3)
+        self.finished_tasks.setSelectionMode(3)
+
     def create_add_button(self):
-        button_add_task = QPushButton('Add Task', self)  # button "Add Task"
-        button_add_task.clicked.connect(self.add_task)
-        self.hbox1.addWidget(button_add_task)
-        self.hbox1.addWidget(self.add_line)
-        self.vbox.addLayout(self.hbox1)
+        self.add_line.editingFinished.connect(self.add_task)
+
+        self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
         button_finish_task = QPushButton('Finish Task', self)  # button "Finish Task"
@@ -75,11 +77,13 @@ class Challenges(QWidget):
 
     def add_task(self):
         new_active_task = self.add_line.text()
-        self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
-        self.query.addBindValue(new_active_task)
-        self.query.exec()
+        self.add_line.clear()
+        if new_active_task != '':
+            self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
+            self.query.addBindValue(new_active_task)
+            self.query.exec()
 
-        self.active_tasks.addItem(new_active_task)
+            self.active_tasks.addItem(new_active_task)
 
     def create_db(self):
         self.db = QSqlDatabase.addDatabase("QSQLITE")
