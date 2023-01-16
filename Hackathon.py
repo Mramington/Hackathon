@@ -28,6 +28,14 @@ class Challenges(QWidget):
         self.finished_tasks = QListWidget()
         self.add_line = QLineEdit()
 
+        self.window_color = "#5BAF8F"  # color of window
+        self.label_color = "#FFC0CB"  # color of label
+        # self.setStyleSheet(f"background-color: {self.window_color}")  # how change window color
+        self.label_active_tasks.setStyleSheet(f"background-color: {self.label_color}")  # how change label color
+        self.active_tasks.setStyleSheet("background-color: #00FFFF")
+        self.add_line.setStyleSheet("background-color: #00FFFF;"
+                                    "font-family: Bernadette")  # how change font
+
         self.initUI()
 
     def initUI(self):
@@ -108,5 +116,7 @@ class Challenges(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyle('Fusion')  # Application style, you can use "Windows", "windowsvista" or "Fusion",
+    # by default, it is "windowsvista"
     example = Challenges()
     sys.exit(app.exec_())
