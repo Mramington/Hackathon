@@ -38,9 +38,22 @@ class Challenges(QWidget):
     def set_structure(self):
         self.create_add_button()
         self.set_qlistwidgets_and_qlabels()
-        self.show_active_tasks()
-
         self.create_buttons()  # buttons on window
+
+        self.show_active_tasks()
+        self.show_finished_tasks()
+        self.settings_of_lists_selections()
+
+
+    def settings_of_lists_selections(self):
+        self.active_tasks.setSelectionMode(3)
+        self.finished_tasks.setSelectionMode(3)
+
+        self.active_tasks.doubleClicked.connect(self.turn_the_task)
+        self.finished_tasks.doubleClicked.connect(self.turn_the_task)
+
+        self.active_tasks.itemSelectionChanged.connect(self.clear_selection)
+        self.finished_tasks.itemSelectionChanged.connect(self.clear_selection)
 
     def set_qlistwidgets_and_qlabels(self):
         self.hbox2.addWidget(self.label_active_tasks)
@@ -53,8 +66,6 @@ class Challenges(QWidget):
 
         self.setLayout(self.vbox)
 
-        self.active_tasks.setSelectionMode(3)
-        self.finished_tasks.setSelectionMode(3)
 
     def create_add_button(self):
         self.add_line.editingFinished.connect(self.add_task)
@@ -62,28 +73,81 @@ class Challenges(QWidget):
         self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
-        button_finish_task = QPushButton('Finish Task', self)  # button "Finish Task"
-        button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
+        self.button_finish_task = QPushButton('Turn', self)  # button "Finish Task"
+        self.button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
+        self.button_del_task.clicked.connect(self.turn_the_task)
+        self.button_finish_task.clicked.connect(self.turn_the_task)
 
-        self.hbox4.addWidget(button_finish_task)
-        self.hbox4.addWidget(button_del_task)
-
+        self.hbox4.addWidget(self.button_finish_task)
+        self.hbox4.addWidget(self.button_del_task)
         self.vbox.addLayout(self.hbox4)
+
+    def clear_selection(self):
+        sender = self.sender()
+        if sender is self.finished_tasks:
+            self.active_tasks.clearSelection()
+        else:
+            self.finished_tasks.clearSelection()
 
     def show_active_tasks(self):
         self.query.exec("""SELECT active FROM active_tasks""")
+        self.local_list_of_active_tasks = []
         while self.query.next():
-            self.active_tasks.addItem(self.query.value(0))
+            value = self.query.value(0)
+            self.active_tasks.addItem(value)
+            self.local_list_of_active_tasks.append(value)
+
+    def show_finished_tasks(self):
+        self.query.exec("""SELECT finished FROM finished_tasks""")
+        self.local_list_of_finished_tasks = []
+        while self.query.next():
+            value = self.query.value(0)
+            self.finished_tasks.addItem(value)
+            self.local_list_of_finished_tasks.append(value)
 
     def add_task(self):
         new_active_task = self.add_line.text()
         self.add_line.clear()
         if new_active_task != '':
-            self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
-            self.query.addBindValue(new_active_task)
-            self.query.exec()
+            if new_active_task not in self.local_list_of_active_tasks \
+                    and new_active_task not in self.local_list_of_finished_tasks:
+                self.local_list_of_active_tasks.append(new_active_task)
 
-            self.active_tasks.addItem(new_active_task)
+                self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
+                self.query.addBindValue(new_active_task)
+                self.query.exec()
+
+                self.active_tasks.addItem(new_active_task)
+
+    def turn_the_task(self):
+        indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
+        indexes_of_active_selected_items = self.active_tasks.selectedIndexes()
+        if len(indexes_of_finished_selected_items) > 0:
+            for i in indexes_of_finished_selected_items[-1::-1]:
+                item = self.finished_tasks.takeItem(i.row()).text()
+                self.active_tasks.addItem(item)
+                self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
+                self.query.addBindValue(item)
+                self.query.exec()
+                self.local_list_of_active_tasks.append(item)
+
+                self.query.prepare("""DELETE FROM finished_tasks WHERE finished=(?)""")
+                self.query.addBindValue(item)
+                self.query.exec()
+                self.local_list_of_finished_tasks.remove(item)
+        if len(indexes_of_active_selected_items) > 0:
+            for i in indexes_of_active_selected_items[-1::-1]:
+                item = self.active_tasks.takeItem(i.row()).text()
+                self.finished_tasks.addItem(item)
+                self.query.prepare("""INSERT INTO finished_tasks (finished) VALUES (?)""")
+                self.query.addBindValue(item)
+                self.query.exec()
+                self.local_list_of_finished_tasks.append(item)
+
+                self.query.prepare("""DELETE FROM active_tasks WHERE active=(?)""")
+                self.query.addBindValue(item)
+                self.query.exec()
+                self.local_list_of_active_tasks.remove(item)
 
     def create_db(self):
         self.db = QSqlDatabase.addDatabase("QSQLITE")
