@@ -29,11 +29,11 @@ class Challenges(QWidget):
         self.add_line = QLineEdit()
 
         self.window_color = "#5BAF8F"  # color of window
-        self.label_color = "#FFC0CB"  # color of label
+        self.label_color = "#f0f0ed"  # color of label
         # self.setStyleSheet(f"background-color: {self.window_color}")  # how change window color
         self.label_active_tasks.setStyleSheet(f"background-color: {self.label_color}")  # how change label color
-        self.active_tasks.setStyleSheet("background-color: #00FFFF")
-        self.add_line.setStyleSheet("background-color: #00FFFF;"
+        self.active_tasks.setStyleSheet("background-color: #f0f0ed")
+        self.add_line.setStyleSheet("background-color: #f0f0ed;"
                                     "font-family: Bernadette")  # how change font
 
         self.initUI()
@@ -76,19 +76,20 @@ class Challenges(QWidget):
 
 
     def create_add_button(self):
-        placeholder_text = 'Write here to add a Task'
+        placeholder_text = 'Add'
         self.add_line.setPlaceholderText(placeholder_text)  # Adding translucent (полупрозрачный) text to add_line
 
         self.add_line.editingFinished.connect(self.add_task)
         self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
-        self.button_finish_task = QPushButton('Turn', self)  # button "Finish Task"
+        self.button_turn_task = QPushButton('Turn', self)  # button "Finish Task"
         self.button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
-        self.button_del_task.clicked.connect(self.turn_the_task)
-        self.button_finish_task.clicked.connect(self.turn_the_task)
 
-        self.hbox4.addWidget(self.button_finish_task)
+        # self.button_del_task.clicked.connect(self.turn_the_task) # temporarily does not work
+        self.button_turn_task.clicked.connect(self.turn_the_task)
+
+        self.hbox4.addWidget(self.button_turn_task)
         self.hbox4.addWidget(self.button_del_task)
         self.vbox.addLayout(self.hbox4)
 
@@ -100,16 +101,16 @@ class Challenges(QWidget):
             self.finished_tasks.clearSelection()
 
     def show_active_tasks(self):
-        self.query.exec("""SELECT active FROM active_tasks""")
         self.local_list_of_active_tasks = []
+        self.query.exec("""SELECT active FROM active_tasks""")
         while self.query.next():
             value = self.query.value(0)
             self.active_tasks.addItem(value)
             self.local_list_of_active_tasks.append(value)
 
     def show_finished_tasks(self):
-        self.query.exec("""SELECT finished FROM finished_tasks""")
         self.local_list_of_finished_tasks = []
+        self.query.exec("""SELECT finished FROM finished_tasks""")
         while self.query.next():
             value = self.query.value(0)
             self.finished_tasks.addItem(value)
@@ -145,6 +146,7 @@ class Challenges(QWidget):
                 self.query.addBindValue(item)
                 self.query.exec()
                 self.local_list_of_finished_tasks.remove(item)
+
         if len(indexes_of_active_selected_items) > 0:
             for i in indexes_of_active_selected_items[-1::-1]:
                 item = self.active_tasks.takeItem(i.row()).text()
