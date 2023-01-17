@@ -10,7 +10,7 @@ class Challenges(QWidget):
 
         # window
         self.setWindowTitle('Tasks List')
-        self.setMinimumSize(200, 200)  # minimal size of window, чтобы не баловались
+        self.setMinimumSize(220, 200)  # minimal size of window, чтобы не баловались
         self.resize(500, 400)
 
         # creation of datebase
@@ -27,6 +27,14 @@ class Challenges(QWidget):
         self.active_tasks = QListWidget()
         self.finished_tasks = QListWidget()
         self.add_line = QLineEdit()
+
+        self.window_color = "#5BAF8F"  # color of window
+        self.label_color = "#FFC0CB"  # color of label
+        # self.setStyleSheet(f"background-color: {self.window_color}")  # how change window color
+        self.label_active_tasks.setStyleSheet(f"background-color: {self.label_color}")  # how change label color
+        self.active_tasks.setStyleSheet("background-color: #00FFFF")
+        self.add_line.setStyleSheet("background-color: #00FFFF;"
+                                    "font-family: Bernadette")  # how change font
 
         self.initUI()
 
@@ -68,8 +76,10 @@ class Challenges(QWidget):
 
 
     def create_add_button(self):
-        self.add_line.editingFinished.connect(self.add_task)
+        placeholder_text = 'Write here to add a Task'
+        self.add_line.setPlaceholderText(placeholder_text)  # Adding translucent (полупрозрачный) text to add_line
 
+        self.add_line.editingFinished.connect(self.add_task)
         self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
@@ -170,5 +180,7 @@ class Challenges(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyle('Fusion')  # Application style, you can use "Windows", "windowsvista" or "Fusion",
+    # by default, it is "windowsvista"
     example = Challenges()
     sys.exit(app.exec_())
