@@ -1,7 +1,9 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget
+from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, \
+    QLabel, QLineEdit, QListWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5.QtGui import QIcon
 
 
 class Challenges(QWidget):
@@ -28,19 +30,12 @@ class Challenges(QWidget):
         self.finished_tasks = QListWidget()
         self.add_line = QLineEdit()
 
-        self.window_color = "#5BAF8F"  # color of window
-        self.label_color = "#f0f0ed"  # color of label
-        # self.setStyleSheet(f"background-color: {self.window_color}")  # how change window color
-        self.label_active_tasks.setStyleSheet(f"background-color: {self.label_color}")  # how change label color
-        self.active_tasks.setStyleSheet("background-color: #f0f0ed")
-        self.add_line.setStyleSheet("background-color: #f0f0ed;"
-                                    "font-family: Bernadette")  # how change font
-
         self.initUI()
 
     def initUI(self):
         self.set_structure()
         self.create_db()
+        self.design()
         self.show()
 
     def set_structure(self):
@@ -51,7 +46,6 @@ class Challenges(QWidget):
         self.show_active_tasks()
         self.show_finished_tasks()
         self.settings_of_lists_selections()
-
 
     def settings_of_lists_selections(self):
         self.active_tasks.setSelectionMode(3)
@@ -73,7 +67,6 @@ class Challenges(QWidget):
         self.vbox.addLayout(self.hbox3)
 
         self.setLayout(self.vbox)
-
 
     def create_add_button(self):
         placeholder_text = 'Add'
@@ -178,6 +171,57 @@ class Challenges(QWidget):
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         finished VARCHAR(255) NOT NULL
         )""")
+
+    def design(self):
+        self.window_color = "#000000"  # color of window
+        self.label_color = "#a2a2a2"  # color of label
+        self.add_color = "#107c10"
+        self.list_color = "#414141"
+        self.setStyleSheet(f"color: {self.window_color};"
+                           "font-size: 16px")  # how change window color
+        self.setWindowIcon(QIcon('C:/Users/Skill_One_Love/Documents/GitHub/Hackathon/android.png'))
+        self.label_active_tasks.setStyleSheet(  # "border: 2px solid;"
+            # "border-radius: 5px;"
+            # f"border: 2px solid {self.label_color};"
+            "padding: 1px 1px;"
+            "min-height: 15px")  # how change label color
+        self.label_finished_tasks.setStyleSheet(  # "border: 2px solid;"
+            # "border-radius: 5px;"
+            # f"border: 2px solid {self.label_color};"
+            "padding: 1px 1px;"
+            "min-height: 15px")
+        self.active_tasks.setStyleSheet("background-color: #f0f0ed")
+        self.add_line.setStyleSheet("background-color: #f0f0ed;"
+                                    "font-family: Bernadette;"
+                                    f"border: 2px solid {self.add_color};"
+                                    "border-radius: 5px;"
+                                    "border: 2px solid;"
+                                    "padding: 1px 1px;")  # how change font
+
+        self.button_turn_task.setStyleSheet("border: 2px solid;"
+                                            "border-radius: 5px;"
+                                            "border: 2px solid;"
+                                            "padding: 1px 1px;"
+                                            "min-height: 35px")
+        self.button_del_task.setStyleSheet("border: 2px solid;"
+                                           "border-radius: 5px;"
+                                           "border: 2px solid;"
+                                           "padding: 1px 1px;"
+                                           "min-height: 35px")
+        # Active Tasks
+        self.active_tasks.setStyleSheet(f"background-color: {self.list_color};"
+                                        "border: 0px solid;"
+                                        "border-radius: 5px;"
+                                        f"border: 0px solid {self.label_color};"
+                                        "padding: 1px 1px;"
+                                        "min-height: 35px")
+        # Finished Tasks
+        self.finished_tasks.setStyleSheet(f"background-color: {self.list_color};"
+                                          "border: 0px solid;"
+                                          "border-radius: 5px;"
+                                          f"border: 0px solid {self.label_color};"
+                                          "padding: 1px 1px;"
+                                          "min-height: 35px")
 
 
 if __name__ == '__main__':
