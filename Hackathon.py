@@ -1,10 +1,15 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, \
+from PyQt5.QtWidgets import QWidget, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, \
     QLabel, QLineEdit, QListWidget
-from PyQt5.QtCore import Qt
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QIcon
 
+
+def row_if_index_list(lst):
+    answer = []
+    for i in lst:
+        answer.append(i.row())
+    return answer
 
 class Challenges(QWidget):
     def __init__(self):
@@ -79,7 +84,7 @@ class Challenges(QWidget):
         self.button_turn_task = QPushButton('Turn', self)  # button "Finish Task"
         self.button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
 
-        # self.button_del_task.clicked.connect(self.turn_the_task) # temporarily does not work
+        self.button_del_task.clicked.connect(self.delete_the_task)
         self.button_turn_task.clicked.connect(self.turn_the_task)
 
         self.hbox4.addWidget(self.button_turn_task)
@@ -125,34 +130,59 @@ class Challenges(QWidget):
 
     def turn_the_task(self):
         indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
+        indexes_of_finished_selected_items = row_if_index_list(indexes_of_finished_selected_items)
+        indexes_of_finished_selected_items.sort()
         indexes_of_active_selected_items = self.active_tasks.selectedIndexes()
+        indexes_of_active_selected_items = row_if_index_list(indexes_of_active_selected_items)
+        indexes_of_active_selected_items.sort()
         if len(indexes_of_finished_selected_items) > 0:
             for i in indexes_of_finished_selected_items[-1::-1]:
-                item = self.finished_tasks.takeItem(i.row()).text()
+                item = self.finished_tasks.takeItem(i).text()
                 self.active_tasks.addItem(item)
                 self.query.prepare("""INSERT INTO active_tasks (active) VALUES (?)""")
                 self.query.addBindValue(item)
                 self.query.exec()
                 self.local_list_of_active_tasks.append(item)
 
-                self.query.prepare("""DELETE FROM finished_tasks WHERE finished=(?)""")
-                self.query.addBindValue(item)
-                self.query.exec()
-                self.local_list_of_finished_tasks.remove(item)
+                self.delete_from_finished_tasks(item)
 
         if len(indexes_of_active_selected_items) > 0:
             for i in indexes_of_active_selected_items[-1::-1]:
-                item = self.active_tasks.takeItem(i.row()).text()
+                item = self.active_tasks.takeItem(i).text()
                 self.finished_tasks.addItem(item)
                 self.query.prepare("""INSERT INTO finished_tasks (finished) VALUES (?)""")
                 self.query.addBindValue(item)
                 self.query.exec()
                 self.local_list_of_finished_tasks.append(item)
+                print("first")
 
-                self.query.prepare("""DELETE FROM active_tasks WHERE active=(?)""")
-                self.query.addBindValue(item)
-                self.query.exec()
-                self.local_list_of_active_tasks.remove(item)
+                self.delete_from_active_tasks(item)
+                print("second")
+
+    def delete_the_task(self):
+        indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
+        indexes_of_active_selected_items = self.active_tasks.selectedIndexes()
+        if len(indexes_of_finished_selected_items) > 0:
+            for i in indexes_of_finished_selected_items[-1::-1]:
+                item = self.finished_tasks.takeItem(i.row()).text()
+                self.delete_from_finished_tasks(item)
+
+        if len(indexes_of_active_selected_items) > 0:
+            for i in indexes_of_active_selected_items[-1::-1]:
+                item = self.active_tasks.takeItem(i.row()).text()
+                self.delete_from_active_tasks(item)
+
+    def delete_from_finished_tasks(self, item):
+        self.query.prepare("""DELETE FROM finished_tasks WHERE finished=(?)""")
+        self.query.addBindValue(item)
+        self.query.exec()
+        self.local_list_of_finished_tasks.remove(item)
+
+    def delete_from_active_tasks(self, item):
+        self.query.prepare("""DELETE FROM active_tasks WHERE active=(?)""")
+        self.query.addBindValue(item)
+        self.query.exec()
+        self.local_list_of_active_tasks.remove(item)
 
     def create_db(self):
         self.db = QSqlDatabase.addDatabase("QSQLITE")
@@ -179,7 +209,7 @@ class Challenges(QWidget):
         self.list_color = "#414141"
         self.setStyleSheet(f"color: {self.window_color};"
                            "font-size: 16px")  # how change window color
-        self.setWindowIcon(QIcon('C:/Users/Skill_One_Love/Documents/GitHub/Hackathon/android.png'))
+        self.setWindowIcon(QIcon('Logo.png'))
         self.label_active_tasks.setStyleSheet(  # "border: 2px solid;"
             # "border-radius: 5px;"
             # f"border: 2px solid {self.label_color};"
@@ -203,6 +233,7 @@ class Challenges(QWidget):
                                             "border: 2px solid;"
                                             "padding: 1px 1px;"
                                             "min-height: 35px")
+
         self.button_del_task.setStyleSheet("border: 2px solid;"
                                            "border-radius: 5px;"
                                            "border: 2px solid;"
