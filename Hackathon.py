@@ -34,7 +34,7 @@ class Challenges(QWidget):
         self.label_active_tasks.setStyleSheet(f"background-color: {self.label_color}")  # how change label color
         self.active_tasks.setStyleSheet("background-color: #f0f0ed")
         self.add_line.setStyleSheet("background-color: #f0f0ed;"
-                                    "font-family: Bernadette")  # how change font
+                                    "font-family: Bernadette")  # how change fontw
 
         self.initUI()
 
