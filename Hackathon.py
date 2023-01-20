@@ -203,56 +203,61 @@ class Challenges(QWidget):
         )""")
 
     def design(self):
-        self.window_color = "#000000"  # color of window
-        self.label_color = "#a2a2a2"  # color of label
+        self.window_color = "#22222e"  # color of window
+        self.label_color = "#fb5b5d"  # color of label
         self.add_color = "#107c10"
         self.list_color = "#414141"
-        self.setStyleSheet(f"color: {self.window_color};"
+
+        self.setStyleSheet(f"background-color: {self.window_color};"
                            "font-size: 16px")  # how change window color
         self.setWindowIcon(QIcon('Logo.png'))
-        self.label_active_tasks.setStyleSheet(  # "border: 2px solid;"
-            # "border-radius: 5px;"
-            # f"border: 2px solid {self.label_color};"
+        self.label_active_tasks.setStyleSheet(
+            f"background-color: {self.label_color};"
+            "border-radius: 5px;"
+            f"border: 2px solid {self.label_color};"
             "padding: 1px 1px;"
             "min-height: 15px")  # how change label color
-        self.label_finished_tasks.setStyleSheet(  # "border: 2px solid;"
-            # "border-radius: 5px;"
-            # f"border: 2px solid {self.label_color};"
+        self.label_finished_tasks.setStyleSheet(
+            f"background-color: {self.label_color};"
+            "border-radius: 5px;"
+            f"border: 2px solid {self.label_color};"
             "padding: 1px 1px;"
             "min-height: 15px")
-        self.active_tasks.setStyleSheet("background-color: #f0f0ed")
-        self.add_line.setStyleSheet("background-color: #f0f0ed;"
+        self.add_line.setStyleSheet(
                                     "font-family: Bernadette;"
-                                    f"border: 2px solid {self.add_color};"
                                     "border-radius: 5px;"
-                                    "border: 2px solid;"
-                                    "padding: 1px 1px;")  # how change font
+                                    f"border: 2px solid {self.label_color};"
+                                    "padding: 1px 1px;"
+                                    "color: white")  # how change font
 
-        self.button_turn_task.setStyleSheet("border: 2px solid;"
+        self.button_turn_task.setStyleSheet(f"background-color: {self.label_color};"
+                                            "border: 2px solid;"
                                             "border-radius: 5px;"
                                             "border: 2px solid;"
                                             "padding: 1px 1px;"
                                             "min-height: 35px")
 
-        self.button_del_task.setStyleSheet("border: 2px solid;"
+        self.button_del_task.setStyleSheet(f"background-color: {self.label_color};"
+                                            "border: 2px solid;"
                                            "border-radius: 5px;"
                                            "border: 2px solid;"
                                            "padding: 1px 1px;"
                                            "min-height: 35px")
         # Active Tasks
-        self.active_tasks.setStyleSheet(f"background-color: {self.list_color};"
-                                        "border: 0px solid;"
+        self.active_tasks.setStyleSheet(f"background-color: {self.window_color};"
                                         "border-radius: 5px;"
-                                        f"border: 0px solid {self.label_color};"
+                                        f"border: 3px solid {self.label_color};"
                                         "padding: 1px 1px;"
-                                        "min-height: 35px")
+                                        "min-height: 35px;"
+                                        "color: white;")
+        #self.active_tasks.item().setStyleSheet()
         # Finished Tasks
-        self.finished_tasks.setStyleSheet(f"background-color: {self.list_color};"
-                                          "border: 0px solid;"
+        self.finished_tasks.setStyleSheet(f"background-color: {self.window_color};"
                                           "border-radius: 5px;"
-                                          f"border: 0px solid {self.label_color};"
+                                          f"border: 3px solid {self.label_color};"
                                           "padding: 1px 1px;"
-                                          "min-height: 35px")
+                                          "min-height: 35px;"
+                                          "color: white")
 
 
 if __name__ == '__main__':
