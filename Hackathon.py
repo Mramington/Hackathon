@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QVBoxLayout, QHB
     QLabel, QLineEdit, QListWidget, QSizePolicy
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QIcon
+import css
 
 
 def row_if_index_list(lst):
@@ -54,6 +55,7 @@ class Challenges(QWidget):
         self.show_finished_tasks()
         self.settings_of_lists_selections()
 
+
     def settings_of_lists_selections(self):
         self.active_tasks.setSelectionMode(3)
         self.finished_tasks.setSelectionMode(3)
@@ -63,6 +65,14 @@ class Challenges(QWidget):
 
         self.active_tasks.itemSelectionChanged.connect(self.clear_selection)
         self.finished_tasks.itemSelectionChanged.connect(self.clear_selection)
+
+    def keyPressEvent(self, e):
+        key = e.key()
+        if key == 16777223:
+            self.delete_dialog()
+        elif key == 16777220:
+            self.turn_the_task()
+
 
     def set_qlistwidgets_and_qlabels(self):
         self.hbox2.addWidget(self.label_active_tasks)
@@ -87,7 +97,7 @@ class Challenges(QWidget):
         self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
-        self.button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
+        self.button_del_task = QPushButton('Delete', self)  # button "Delete Task"
         self.button_turn_task = QPushButton('Turn', self)  # button "Finish Task"
         self.button_turn_task.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.button_del_task.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -224,10 +234,9 @@ class Challenges(QWidget):
         self.label_color = "#fb5b5d"  # color of label
         self.add_color = "#107c10"
         self.list_color = "#414141"
-        self.setWindowIcon(QIcon('icon.ico'))
+        self.setWindowIcon(QIcon('android.png'))
         self.setStyleSheet(f"background-color: {self.window_color};"
                            "font-size: 16px")  # how change window color
-        self.setWindowIcon(QIcon('Logo.png'))
         self.label_active_tasks.setStyleSheet(
             f"background-color: {self.label_color};"
             "border-radius: 5px;"
@@ -249,33 +258,7 @@ class Challenges(QWidget):
             "padding: 1px 1px;"
             "color: white")  # how change font
 
-        self.button_turn_task.setStyleSheet("""QPushButton {
-                                               background-color: #fb5b5d;
-                                               border: 2px solid;
-                                               border-radius: 5px;
-                                               border: 2px solid;
-                                               padding: 1px 1px;
-                                               min-width: 50px;
-                                               max-width: 50px
-                                               }
-
-                                               QPushButton:hover {
-                                               background-color: red;
-                                               color: #fff;    
-                                               border: 1px solid white;
-                                               text-decoration: None;
-                                               border: 2px solid;
-                                               border-radius: 5px;
-                                               border: 2px solid;
-                                               padding: 1px 1px;
-                                               background-color: grey
-                                               }
-                                               
-                                               QPushButton:hover:pressed {
-                                               background-color: #f49354;
-                                               color: black;
-                                            }"""
-                                           )
+        self.button_turn_task.setStyleSheet(css.button_turn_task)
 
         self.button_del_task.setStyleSheet("""QPushButton {
                                                background-color: #fb5b5d;
@@ -303,24 +286,30 @@ class Challenges(QWidget):
                                                
                                                QPushButton:hover:pressed {
                                                background-color: #f49354;
-                                               color: black;
+                                               color: black;}
+                                               QPushButton:focus {
+                                               border: 1px solid blue}
                                             }"""
                                            )
         # Active Tasks
-        self.active_tasks.setStyleSheet(f"background-color: {self.window_color};"
-                                        "border-radius: 5px;"
-                                        f"border: 3px solid {self.label_color};"
-                                        "padding: 1px 1px;"
-                                        "min-height: 35px;"
-                                        "color: white;")
+        self.active_tasks.setStyleSheet("""QListWidget {background-color: #22222e;
+                                        border-radius: 5px;
+                                        border: 3px solid #fb5b5d;
+                                        padding: 1px 1px;
+                                        min-height: 35px;
+                                        color: white;}
+                                        QListWidget:focus{
+                                        border: 1px solid blue}""")
         # self.active_tasks.item().setStyleSheet()
         # Finished Tasks
-        self.finished_tasks.setStyleSheet(f"background-color: {self.window_color};"
-                                          "border-radius: 5px;"
-                                          f"border: 3px solid {self.label_color};"
-                                          "padding: 1px 1px;"
-                                          "min-height: 35px;"
-                                          "color: white")
+        self.finished_tasks.setStyleSheet("""QListWidget {background-color: #22222e;
+                                          border-radius: 5px;
+                                          border: 3px solid #fb5b5d;
+                                          padding: 1px 1px;
+                                          min-height: 35px;
+                                          color: white}
+                                          QListWidget:focus{
+                                          border: 1px solid blue}""")
 
 
 if __name__ == '__main__':
