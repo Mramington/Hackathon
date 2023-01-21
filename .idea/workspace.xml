@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d144e99-dcdc-49f5-b22e-9ad6f7bf3e81" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hackathon.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hackathon.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hackathon_Molecule_group.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Hackathon_Molecule_group.sqlite" afterDir="false" />
@@ -82,7 +81,8 @@
       <workItem from="1674228251111" duration="1601000" />
       <workItem from="1674238226905" duration="1220000" />
       <workItem from="1674239483346" duration="10004000" />
-      <workItem from="1674253917359" duration="5255000" />
+      <workItem from="1674253917359" duration="5516000" />
+      <workItem from="1674307740785" duration="5648000" />
     </task>
     <servers />
   </component>
@@ -91,6 +91,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Hackathon$Hackathon.coverage" NAME="Hackathon Coverage Results" MODIFIED="1674229859415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Hackathon_py$Hackathon.coverage" NAME="Hackathon Coverage Results" MODIFIED="1674259091066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Hackathon_py$Hackathon.coverage" NAME="Hackathon Coverage Results" MODIFIED="1674313400533" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
