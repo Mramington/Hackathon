@@ -136,7 +136,7 @@ class Challenges(QWidget):
                 self.active_tasks.addItem(new_active_task)
 
     def delete_dialog(self):
-        ret = QMessageBox.question(self, 'MessageBox', "Click a button",
+        ret = QMessageBox.question(self, 'Warning', "Are you cure?",
                                    QMessageBox.Yes | QMessageBox.No)
 
         if ret == QMessageBox.Yes:
@@ -333,10 +333,11 @@ if __name__ == '__main__':
                             color: #919197;
                         }
                         QMessageBox QPushButton {
+                            color: #919197;
                            background-color: #fb5b5d;
                            border: 2px solid;
                            border-radius: 5px;
-                           border: 2px solid;
+                           border: 2px solid #919197;
                            padding: 1px 1px;
                            min-width: 50px;
                            max-width: 50px;
@@ -349,14 +350,15 @@ if __name__ == '__main__':
                            text-decoration: None;
                            border: 2px solid;
                            border-radius: 5px;
-                           border: 2px solid;
+                           border: 2px solid white;
                            padding: 1px 1px;
                            background-color: grey;
                         }
 
                         QMessageBox QPushButton:hover:pressed {
                            background-color: #AAAAAA;
-                           color: skyblue
+                           color: skyblue;
+                           border: 2px solid skyblue
                         }
     """)
     app.setStyle('Fusion')  # Application style, you can use "Windows", "windowsvista" or "Fusion",
