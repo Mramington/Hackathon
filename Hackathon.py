@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QInputDialog, QVBoxLayout, QHBoxLayout, QPushButton, \
-    QLabel, QLineEdit, QListWidget
+from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QVBoxLayout, QHBoxLayout, QPushButton, \
+    QLabel, QLineEdit, QListWidget, QSizePolicy
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QIcon
 
@@ -11,25 +11,27 @@ def row_if_index_list(lst):
         answer.append(i.row())
     return answer
 
+
 class Challenges(QWidget):
     def __init__(self):
         super().__init__()
 
         # window
         self.setWindowTitle('Tasks List')
-        self.setMinimumSize(220, 200)  # minimal size of window, чтобы не баловались
+        self.setMinimumSize(330, 200)  # minimal size of window, чтобы не баловались
         self.resize(500, 400)
 
-        # creation of datebase
+        # creation of database
         self.create_db()
 
         # area
         self.vbox = QVBoxLayout()
-        self.hbox1 = QHBoxLayout()
+        self.vbox1 = QVBoxLayout()
         self.hbox2 = QHBoxLayout()
         self.hbox3 = QHBoxLayout()
         self.hbox4 = QHBoxLayout()
         self.label_active_tasks = QLabel('Active Tasks', self)  # area for active tasks
+        self.label_empty = QLabel('', self)
         self.label_finished_tasks = QLabel('Finished Tasks', self)  # area for completed tasks
         self.active_tasks = QListWidget()
         self.finished_tasks = QListWidget()
@@ -64,10 +66,14 @@ class Challenges(QWidget):
 
     def set_qlistwidgets_and_qlabels(self):
         self.hbox2.addWidget(self.label_active_tasks)
+        self.hbox2.addWidget(self.label_empty)
         self.hbox2.addWidget(self.label_finished_tasks)
         self.vbox.addLayout(self.hbox2)
 
         self.hbox3.addWidget(self.active_tasks)
+
+        self.hbox3.addLayout(self.vbox1)
+
         self.hbox3.addWidget(self.finished_tasks)
         self.vbox.addLayout(self.hbox3)
 
@@ -81,15 +87,16 @@ class Challenges(QWidget):
         self.vbox.addWidget(self.add_line)
 
     def create_buttons(self):
-        self.button_turn_task = QPushButton('Turn', self)  # button "Finish Task"
         self.button_del_task = QPushButton('Delete Task', self)  # button "Delete Task"
+        self.button_turn_task = QPushButton('Turn', self)  # button "Finish Task"
+        self.button_turn_task.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.button_del_task.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
-        self.button_del_task.clicked.connect(self.delete_the_task)
         self.button_turn_task.clicked.connect(self.turn_the_task)
+        self.button_del_task.clicked.connect(self.delete_dialog)
 
-        self.hbox4.addWidget(self.button_turn_task)
-        self.hbox4.addWidget(self.button_del_task)
-        self.vbox.addLayout(self.hbox4)
+        self.vbox1.addWidget(self.button_turn_task)
+        self.vbox1.addWidget(self.button_del_task)
 
     def clear_selection(self):
         sender = self.sender()
@@ -127,6 +134,16 @@ class Challenges(QWidget):
                 self.query.exec()
 
                 self.active_tasks.addItem(new_active_task)
+
+    def delete_dialog(self):
+        ret = QMessageBox.question(self, 'MessageBox', "Click a button",
+                                   QMessageBox.Yes | QMessageBox.No)
+
+        if ret == QMessageBox.Yes:
+            print('Button QMessageBox.Yes clicked.')
+            self.delete_the_task()
+        else:
+            print('Button QMessageBox.No clicked.')
 
     def turn_the_task(self):
         indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
@@ -207,7 +224,7 @@ class Challenges(QWidget):
         self.label_color = "#fb5b5d"  # color of label
         self.add_color = "#107c10"
         self.list_color = "#414141"
-
+        self.setWindowIcon(QIcon('icon.ico'))
         self.setStyleSheet(f"background-color: {self.window_color};"
                            "font-size: 16px")  # how change window color
         self.setWindowIcon(QIcon('Logo.png'))
@@ -217,6 +234,8 @@ class Challenges(QWidget):
             f"border: 2px solid {self.label_color};"
             "padding: 1px 1px;"
             "min-height: 15px")  # how change label color
+        self.label_empty.setStyleSheet(f"max-width: {self.button_turn_task.frameGeometry().width()//2+5}px;"
+                                       f"min-width: {self.button_turn_task.frameGeometry().width()//2+5}px")
         self.label_finished_tasks.setStyleSheet(
             f"background-color: {self.label_color};"
             "border-radius: 5px;"
@@ -224,25 +243,29 @@ class Challenges(QWidget):
             "padding: 1px 1px;"
             "min-height: 15px")
         self.add_line.setStyleSheet(
-                                    "font-family: Bernadette;"
-                                    "border-radius: 5px;"
-                                    f"border: 2px solid {self.label_color};"
-                                    "padding: 1px 1px;"
-                                    "color: white")  # how change font
+            "font-family: Bernadette;"
+            "border-radius: 5px;"
+            f"border: 2px solid {self.label_color};"
+            "padding: 1px 1px;"
+            "color: white")  # how change font
 
         self.button_turn_task.setStyleSheet(f"background-color: {self.label_color};"
                                             "border: 2px solid;"
                                             "border-radius: 5px;"
                                             "border: 2px solid;"
                                             "padding: 1px 1px;"
-                                            "min-height: 35px")
+                                            "min-width: 50px;"
+                                            "max-width: 50px")
 
         self.button_del_task.setStyleSheet(f"background-color: {self.label_color};"
-                                            "border: 2px solid;"
+                                           "border: 2px solid;"
                                            "border-radius: 5px;"
                                            "border: 2px solid;"
                                            "padding: 1px 1px;"
-                                           "min-height: 35px")
+                                           "min-height: 35px;"
+                                           "max-height: 60px;"
+                                           "min-width: 50px;"
+                                           "max-width: 50px")
         # Active Tasks
         self.active_tasks.setStyleSheet(f"background-color: {self.window_color};"
                                         "border-radius: 5px;"
@@ -250,7 +273,7 @@ class Challenges(QWidget):
                                         "padding: 1px 1px;"
                                         "min-height: 35px;"
                                         "color: white;")
-        #self.active_tasks.item().setStyleSheet()
+        # self.active_tasks.item().setStyleSheet()
         # Finished Tasks
         self.finished_tasks.setStyleSheet(f"background-color: {self.window_color};"
                                           "border-radius: 5px;"
@@ -262,6 +285,26 @@ class Challenges(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyleSheet("""
+                        QPushButton {
+                            background: #f67551;
+                        }
+                        QPushButton:hover {
+                            background: #AAAAAA;
+                            color: #fff;    
+                            border: 1px solid white;
+                            text-decoration: None;
+                            border: 2px solid;
+                            border-radius: 5px;
+                            border: 2px solid;
+                            padding: 1px 1px;
+                            background-color: red;
+                        }
+                        QMessageBox  {
+                            background: #AAAAAA;
+                            color: #AAAAAA;
+                        }
+                        """)
     app.setStyle('Fusion')  # Application style, you can use "Windows", "windowsvista" or "Fusion",
     # by default, it is "windowsvista"
     example = Challenges()
