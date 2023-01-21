@@ -249,23 +249,63 @@ class Challenges(QWidget):
             "padding: 1px 1px;"
             "color: white")  # how change font
 
-        self.button_turn_task.setStyleSheet(f"background-color: {self.label_color};"
-                                            "border: 2px solid;"
-                                            "border-radius: 5px;"
-                                            "border: 2px solid;"
-                                            "padding: 1px 1px;"
-                                            "min-width: 50px;"
-                                            "max-width: 50px")
+        self.button_turn_task.setStyleSheet("""QPushButton {
+                                               background-color: #fb5b5d;
+                                               border: 2px solid;
+                                               border-radius: 5px;
+                                               border: 2px solid;
+                                               padding: 1px 1px;
+                                               min-width: 50px;
+                                               max-width: 50px
+                                               }
 
-        self.button_del_task.setStyleSheet(f"background-color: {self.label_color};"
-                                           "border: 2px solid;"
-                                           "border-radius: 5px;"
-                                           "border: 2px solid;"
-                                           "padding: 1px 1px;"
-                                           "min-height: 35px;"
-                                           "max-height: 60px;"
-                                           "min-width: 50px;"
-                                           "max-width: 50px")
+                                               QPushButton:hover {
+                                               background-color: red;
+                                               color: #fff;    
+                                               border: 1px solid white;
+                                               text-decoration: None;
+                                               border: 2px solid;
+                                               border-radius: 5px;
+                                               border: 2px solid;
+                                               padding: 1px 1px;
+                                               background-color: grey
+                                               }
+                                               
+                                               QPushButton:hover:pressed {
+                                               background-color: #f49354;
+                                               color: black;
+                                            }"""
+                                           )
+
+        self.button_del_task.setStyleSheet("""QPushButton {
+                                               background-color: #fb5b5d;
+                                               border: 2px solid;
+                                               border-radius: 5px;
+                                               border: 2px solid;
+                                               padding: 1px 1px;
+                                               min-height: 35px;
+                                               max-height: 60px;
+                                               min-width: 50px;
+                                               max-width: 50px
+                                               }
+
+                                               QPushButton:hover {
+                                               background-color: red;
+                                               color: #fff;    
+                                               border: 1px solid white;
+                                               text-decoration: None;
+                                               border: 2px solid;
+                                               border-radius: 5px;
+                                               border: 2px solid;
+                                               padding: 1px 1px;
+                                               background-color: grey
+                                                }
+                                               
+                                               QPushButton:hover:pressed {
+                                               background-color: #f49354;
+                                               color: black;
+                                            }"""
+                                           )
         # Active Tasks
         self.active_tasks.setStyleSheet(f"background-color: {self.window_color};"
                                         "border-radius: 5px;"
@@ -286,25 +326,39 @@ class Challenges(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet("""
-                        QPushButton {
-                            background: #f67551;
+                        QMessageBox {
+                            background-color: rgb(51, 51, 51);
                         }
-                        QPushButton:hover {
-                            background: #AAAAAA;
-                            color: #fff;    
-                            border: 1px solid white;
-                            text-decoration: None;
-                            border: 2px solid;
-                            border-radius: 5px;
-                            border: 2px solid;
-                            padding: 1px 1px;
-                            background-color: red;
+                        QMessageBox QLabel {
+                            color: #919197;
                         }
-                        QMessageBox  {
-                            background: #AAAAAA;
-                            color: #AAAAAA;
+                        QMessageBox QPushButton {
+                           background-color: #fb5b5d;
+                           border: 2px solid;
+                           border-radius: 5px;
+                           border: 2px solid;
+                           padding: 1px 1px;
+                           min-width: 50px;
+                           max-width: 50px;
                         }
-                        """)
+
+                        QMessageBox QPushButton:hover {
+                           background-color: red;
+                           color: #fff;
+                           border: 1px solid white;
+                           text-decoration: None;
+                           border: 2px solid;
+                           border-radius: 5px;
+                           border: 2px solid;
+                           padding: 1px 1px;
+                           background-color: grey;
+                        }
+
+                        QMessageBox QPushButton:hover:pressed {
+                           background-color: #AAAAAA;
+                           color: skyblue
+                        }
+    """)
     app.setStyle('Fusion')  # Application style, you can use "Windows", "windowsvista" or "Fusion",
     # by default, it is "windowsvista"
     example = Challenges()
