@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QVBoxLayout, QHBoxLayout, QPushButton, \
-    QLabel, QLineEdit, QListWidget, QSizePolicy
+    QLabel, QLineEdit, QListWidget, QSizePolicy, QStyle
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QIcon
 import css
