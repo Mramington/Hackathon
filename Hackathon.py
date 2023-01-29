@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QVBoxLayout, QHB
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtGui import QIcon
 import css
+from PyQt5 import QtCore
 
 
 class Challenges(QWidget):
@@ -30,6 +31,7 @@ class Challenges(QWidget):
         self.active_tasks = QListWidget()
         self.finished_tasks = QListWidget()
         self.add_line = QLineEdit()
+        self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint)
 
         self.initUI()
 
