@@ -55,7 +55,6 @@ class Challenges(QWidget):
         self.show_finished_tasks()
         self.settings_of_lists_selections()
 
-
     def settings_of_lists_selections(self):
         self.active_tasks.setSelectionMode(3)
         self.finished_tasks.setSelectionMode(3)
@@ -72,7 +71,6 @@ class Challenges(QWidget):
             self.delete_dialog()
         elif key == 16777220:
             self.turn_the_task()
-
 
     def set_qlistwidgets_and_qlabels(self):
         self.hbox2.addWidget(self.label_active_tasks)
@@ -146,7 +144,7 @@ class Challenges(QWidget):
                 self.active_tasks.addItem(new_active_task)
 
     def delete_dialog(self):
-        ret = QMessageBox.question(self, 'Warning', "Are you cure?",
+        ret = QMessageBox.question(self, 'Warning', "Are you sure?",
                                    QMessageBox.Yes | QMessageBox.No)
 
         if ret == QMessageBox.Yes:
@@ -188,15 +186,19 @@ class Challenges(QWidget):
 
     def delete_the_task(self):
         indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
+        indexes_of_finished_selected_items = row_if_index_list(indexes_of_finished_selected_items)
+        indexes_of_finished_selected_items.sort()
         indexes_of_active_selected_items = self.active_tasks.selectedIndexes()
+        indexes_of_active_selected_items = row_if_index_list(indexes_of_active_selected_items)
+        indexes_of_active_selected_items.sort()
         if len(indexes_of_finished_selected_items) > 0:
             for i in indexes_of_finished_selected_items[-1::-1]:
-                item = self.finished_tasks.takeItem(i.row()).text()
+                item = self.finished_tasks.takeItem(i).text()
                 self.delete_from_finished_tasks(item)
 
         if len(indexes_of_active_selected_items) > 0:
             for i in indexes_of_active_selected_items[-1::-1]:
-                item = self.active_tasks.takeItem(i.row()).text()
+                item = self.active_tasks.takeItem(i).text()
                 self.delete_from_active_tasks(item)
 
     def delete_from_finished_tasks(self, item):
