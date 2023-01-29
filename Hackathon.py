@@ -6,13 +6,6 @@ from PyQt5.QtGui import QIcon
 import css
 
 
-def row_if_index_list(lst):
-    answer = []
-    for i in lst:
-        answer.append(i.row())
-    return answer
-
-
 class Challenges(QWidget):
     def __init__(self):
         super().__init__()
@@ -155,10 +148,10 @@ class Challenges(QWidget):
 
     def turn_the_task(self):
         indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
-        indexes_of_finished_selected_items = row_if_index_list(indexes_of_finished_selected_items)
+        indexes_of_finished_selected_items = self.row_if_index_list(indexes_of_finished_selected_items)
         indexes_of_finished_selected_items.sort()
         indexes_of_active_selected_items = self.active_tasks.selectedIndexes()
-        indexes_of_active_selected_items = row_if_index_list(indexes_of_active_selected_items)
+        indexes_of_active_selected_items = self.row_if_index_list(indexes_of_active_selected_items)
         indexes_of_active_selected_items.sort()
         if len(indexes_of_finished_selected_items) > 0:
             for i in indexes_of_finished_selected_items[-1::-1]:
@@ -186,10 +179,10 @@ class Challenges(QWidget):
 
     def delete_the_task(self):
         indexes_of_finished_selected_items = self.finished_tasks.selectedIndexes()
-        indexes_of_finished_selected_items = row_if_index_list(indexes_of_finished_selected_items)
+        indexes_of_finished_selected_items = self.row_if_index_list(indexes_of_finished_selected_items)
         indexes_of_finished_selected_items.sort()
         indexes_of_active_selected_items = self.active_tasks.selectedIndexes()
-        indexes_of_active_selected_items = row_if_index_list(indexes_of_active_selected_items)
+        indexes_of_active_selected_items = self.row_if_index_list(indexes_of_active_selected_items)
         indexes_of_active_selected_items.sort()
         if len(indexes_of_finished_selected_items) > 0:
             for i in indexes_of_finished_selected_items[-1::-1]:
@@ -212,6 +205,13 @@ class Challenges(QWidget):
         self.query.addBindValue(item)
         self.query.exec()
         self.local_list_of_active_tasks.remove(item)
+
+    @staticmethod
+    def row_if_index_list(lst):
+        answer = []
+        for i in lst:
+            answer.append(i.row())
+        return answer
 
     def create_db(self):
         self.db = QSqlDatabase.addDatabase("QSQLITE")
